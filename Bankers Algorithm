@@ -1,0 +1,78 @@
+#include<stdio.h>
+#include<stdlib.h>
+void main(){
+ int i,j,p_no,r_no,count=0,k=0;
+ printf("Enter the no. of processes:");
+ scanf("%d",&p_no);
+ printf("Enter the no. of resources:");
+  scanf("%d",&r_no);
+ int available[r_no],allocated[p_no][r_no],max[p_no][r_no],need[p_no][r_no],safeseq[p_no],visited[p_no];
+ printf("Enter the available resources:");
+ for(i=0;i<r_no;i++){
+  scanf("%d",&available[i]);
+ }
+ for(i=0;i<p_no;i++){ 
+  visited[i]=0;
+  printf("Enter the maximum need of p[%d]:",i);
+  for(j=0;j<r_no;j++){
+   scanf("%d",&max[i][j]);
+  }
+  printf("Enter the instance allocated to p[%d]:",i);
+  for(j=0;j<r_no;j++){
+   scanf("%d",&allocated[i][j]);
+  }
+  for(j=0;j<r_no;j++){
+   need[i][j]=max[i][j]-allocated[i][j];
+  }
+ }
+ printf("\n");
+ printf("PROCESS|  MAX  |ALLOCATION|AVAILABLE|  NEED  |\n");
+ for(i=0;i<p_no;i++){   
+  printf(" p[%d]  | ",i);
+  for(j=0;j<r_no;j++){
+   printf("%d ",max[i][j]);
+  }
+  printf("|  ");
+  for(j=0;j<r_no;j++){
+   printf("%d ",allocated[i][j]);
+  }
+  printf("  |  ");
+  for(j=0;j<r_no;j++){
+   printf("%d ",available[j]);
+  }
+  printf(" | ");
+  for(j=0;j<r_no;j++){
+   printf("%d ",need[i][j]);
+  }
+  printf(" |\n");
+ }
+ while(count<p_no){
+  int flag=0;
+  for(i=0;i<p_no;i++){
+   int excecuted=0;
+   for(j=0;j<r_no;j++){
+    if(need[i][j]<=available[j]){
+     excecuted++;
+    }
+   }
+   if(excecuted==r_no&&visited[i]==0){
+    for(j=0;j<r_no;j++)
+     available[j]+=allocated[i][j];
+    flag=1;
+    visited[i]=1;
+    safeseq[k++]=i;
+    count++;
+   }
+  }
+  if(flag==0){
+   printf("NO SAFE SEQUENCE\n");
+   exit(0);
+  }
+ }
+ printf("\nSAFE SEQUENCE:<");
+ for(i=0;i<p_no;i++){
+  printf("p[%d] ",safeseq[i]);
+ }
+ printf(">\n");
+ printf("SAFE SATE EXIST\n");
+}
